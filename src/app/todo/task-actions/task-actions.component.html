@@ -1,0 +1,32 @@
+<div class="card p-3 mb-4 shadow-sm">
+  <div class="row g-2">
+    <div class="col-md-4">
+      <input
+        type="text"
+        id="taskInput"
+        class="form-control form-control-lg"
+        placeholder="Enter a new task"
+        [(ngModel)]="inputTask"
+      />
+    </div>
+    <div class="col-md-2">
+      <button
+        (click)="addTask()"
+        id="addTaskButton"
+        class="btn btn-success btn-lg w-100"
+      >
+        Add Task
+      </button>
+    </div>
+    <div class="col-md-6">
+      <input
+        type="text"
+        id="searchInput"
+        class="form-control form-control-lg"
+        placeholder="Search tasks"
+        [ngModel]="searchedTask()"
+        (ngModelChange)="searchedTask.set($event); updateSearch()"
+      />
+    </div>
+  </div>
+</div>

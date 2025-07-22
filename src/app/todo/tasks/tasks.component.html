@@ -1,0 +1,56 @@
+<div class="row g-4">
+  <div class="col-md-6">
+    <div class="card shadow-sm">
+      <div class="card-header bg-warning text-dark fw-semibold">
+        🕒 Pending Tasks
+      </div>
+      <ul
+        class="list-group list-group-flush"
+        cdkDropList
+        #pendingTasksList="cdkDropList"
+        [cdkDropListData]="pendingTasks()"
+        [cdkDropListConnectedTo]="[completedTasksList]"
+        (cdkDropListDropped)="onTaskDropped($event)"
+        id="pendingTasks"
+      >
+        @for (task of pendingTasks(); track task.id) {
+        <div cdkDrag [cdkDragData]="task">
+          <app-task-item
+            [taskName]="task.text"
+            [isCompleted]="task.completed"
+            [id]="task.id"
+          ></app-task-item>
+        </div>
+
+        }
+      </ul>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card shadow-sm">
+      <div class="card-header bg-success text-white fw-semibold">
+        ✅ Completed Tasks
+      </div>
+      <ul
+        class="list-group list-group-flush"
+        cdkDropList
+        #completedTasksList="cdkDropList"
+        [cdkDropListData]="completedTasks()"
+        [cdkDropListConnectedTo]="[pendingTasksList]"
+        (cdkDropListDropped)="onTaskDropped($event)"
+        id="completedTasks"
+      >
+        @for (task of completedTasks(); track task.id) {
+        <div cdkDrag [cdkDragData]="task">
+          <app-task-item
+            [taskName]="task.text"
+            [isCompleted]="task.completed"
+            [id]="task.id"
+          ></app-task-item>
+        </div>
+
+        }
+      </ul>
+    </div>
+  </div>
+</div>
