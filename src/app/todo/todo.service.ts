@@ -2,10 +2,12 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { NewTask, Task } from './task.model';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, tap, throwError } from 'rxjs';
+import { AuthService } from '../auth/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({ providedIn: 'root' })
 export class TodoService {
+  private authService = inject(AuthService);
   private httpClient = inject(HttpClient);
   private snackBar = inject(MatSnackBar);
   private _tasks = signal<Task[]>([]);
@@ -33,6 +35,7 @@ export class TodoService {
       fields: {
         completed: { booleanValue: newTask.completed },
         text: { stringValue: newTask.text },
+        userId: { stringValue: newTask.userId },
       },
     };
 
@@ -67,6 +70,7 @@ export class TodoService {
       fields: {
         text: { stringValue: task.text },
         completed: { booleanValue: true },
+        userId: { stringValue: task.userId },
       },
     };
 
@@ -93,6 +97,8 @@ export class TodoService {
   }
 
   loadTasks() {
+    const userId = this.authService.getUser()?.id;
+
     return this.httpClient
       .get<{ documents: any[] }>(
         'https://firestore.googleapis.com/v1/projects/to-do-list-80096/databases/(default)/documents/tasks'
@@ -108,8 +114,10 @@ export class TodoService {
                 id,
                 completed: doc.fields.completed.booleanValue,
                 text: doc.fields.text.stringValue,
+                userId: doc.fields.userId?.stringValue,
               };
-            });
+            })
+            .filter((task) => task.userId === userId) as Task[];
         }),
         tap((res) => {
           this._tasks.set(res);

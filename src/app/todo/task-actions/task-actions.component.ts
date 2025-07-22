@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TodoService } from '../todo.service';
 import { NewTask } from '../task.model';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-task-actions',
@@ -11,6 +12,7 @@ import { NewTask } from '../task.model';
 })
 export class TaskActionsComponent {
   todoService = inject(TodoService);
+  authService = inject(AuthService);
   inputTask = signal('');
   searchedTask = signal('');
   addTask() {
@@ -20,6 +22,7 @@ export class TaskActionsComponent {
     const newTask: NewTask = {
       text: this.inputTask(),
       completed: false,
+      userId:this.authService.getUser()?.id
     };
     this.todoService.addTask(newTask).subscribe({
       next: () => {

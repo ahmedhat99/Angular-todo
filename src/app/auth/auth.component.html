@@ -1,0 +1,53 @@
+<div class="row justify-content-center">
+  <div class="col-sm-12 col-md-10 col-lg-8 col-xl-6">
+    @if (error() !== '') {
+    <mat-card class="mb-3 mat-elevation-z3">
+      <mat-card-content>
+        <mat-icon color="warn">error</mat-icon>
+        <span class="text-danger">{{ error() }}</span>
+      </mat-card-content>
+    </mat-card>
+    } @if (isLoading()) {
+    <div class="d-flex justify-content-center my-4">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+    } @else {
+    <mat-card class="mat-elevation-z3">
+      <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <mat-form-field appearance="outline" class="w-100 mb-3">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-100 mb-4">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" formControlName="password" />
+          </mat-form-field>
+
+          <div class="d-flex justify-content-between align-items-center">
+            <button
+              mat-stroked-button
+              color="accent"
+              type="button"
+              (click)="onSwitchmode()"
+            >
+              Switch to: {{ isLoginMode() ? "Sign Up" : "Login" }}
+            </button>
+
+            <button
+              mat-raised-button
+              color="primary"
+              type="submit"
+              [disabled]="form.invalid"
+            >
+              {{ isLoginMode() ? "Login" : "Sign Up" }}
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    }
+  </div>
+</div>

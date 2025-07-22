@@ -1,6 +1,7 @@
-import { Component} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './header/header.component';
+import { AuthService } from './auth/auth.service';
 
 
 @Component({
@@ -12,7 +13,10 @@ import { HeaderComponent } from './header/header.component';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'angular-todo';
-
+  authService = inject(AuthService);
+  ngOnInit(): void {
+    this.authService.autoLogin()
+  }
 }
