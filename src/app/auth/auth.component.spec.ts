@@ -43,8 +43,8 @@ describe('AuthComponent', () => {
   });
 
   it('should initialize the form with empty email and password', () => {
-    const emailControl = component.form.get('email');
-    const passwordControl = component.form.get('password');
+    const emailControl = component.loginForm.get('email');
+    const passwordControl = component.loginForm.get('password');
 
     expect(emailControl?.value).toBe('');
     expect(passwordControl?.value).toBe('');
@@ -57,9 +57,9 @@ describe('AuthComponent', () => {
   });
 
   it('should not submit if form is invalid', () => {
-    component.form.get('email')?.setValue('invalid');
-    component.form.get('password')?.setValue('short');
-    component.onSubmit();
+    component.loginForm.get('email')?.setValue('invalid');
+    component.loginForm.get('password')?.setValue('short');
+    component.onLogin();
 
     expect(authServiceSpy.login).not.toHaveBeenCalled();
     expect(authServiceSpy.signup).not.toHaveBeenCalled();
@@ -67,11 +67,11 @@ describe('AuthComponent', () => {
 
   it('should call login and navigate on successful login', () => {
     component.isLoginMode.set(true);
-    component.form.setValue({ email: 'test@example.com', password: '123456' });
+    component.loginForm.setValue({ email: 'test@example.com', password: '123456' });
 
     authServiceSpy.login.and.returnValue(of({}));
 
-    component.onSubmit();
+    component.onLogin();
 
     expect(authServiceSpy.login).toHaveBeenCalledWith(
       'test@example.com',
@@ -80,16 +80,16 @@ describe('AuthComponent', () => {
 
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/todo']);
     expect(component.isLoading()).toBeFalse();
-    expect(component.form.value).toEqual({ email: null, password: null });
+    expect(component.loginForm.value).toEqual({ email: null, password: null });
   });
 
   it('should call signup and navigate on successful signup', () => {
     component.isLoginMode.set(false);
-    component.form.setValue({ email: 'test@example.com', password: '123456' });
+    component.loginForm.setValue({ email: 'test@example.com', password: '123456' });
 
     authServiceSpy.signup.and.returnValue(of({}));
 
-    component.onSubmit();
+    component.onLogin();
 
     expect(authServiceSpy.signup).toHaveBeenCalledWith(
       'test@example.com',
@@ -98,17 +98,17 @@ describe('AuthComponent', () => {
 
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/todo']);
     expect(component.isLoading()).toBeFalse();
-    expect(component.form.value).toEqual({ email: null, password: null });
+    expect(component.loginForm.value).toEqual({ email: null, password: null });
   });
 
   it('should set error message on error response', () => {
     component.isLoginMode.set(true);
-    component.form.setValue({ email: 'test@example.com', password: '123456' });
+    component.loginForm.setValue({ email: 'test@example.com', password: '123456' });
 
     const errorMsg = 'Invalid credentials';
     authServiceSpy.login.and.returnValue(throwError(() => errorMsg));
 
-    component.onSubmit();
+    component.onLogin();
 
     fixture.detectChanges();
 

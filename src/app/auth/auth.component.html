@@ -11,10 +11,10 @@
     <div class="d-flex justify-content-center my-4">
       <mat-spinner diameter="40"></mat-spinner>
     </div>
-    } @else {
+    } @else { @if(isLoginMode()){
     <mat-card class="mat-elevation-z3">
       <mat-card-content>
-        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
           <mat-form-field appearance="outline" class="w-100 mb-3">
             <mat-label>Email</mat-label>
             <input matInput type="email" formControlName="email" />
@@ -32,22 +32,126 @@
               type="button"
               (click)="onSwitchmode()"
             >
-              Switch to: {{ isLoginMode() ? "Sign Up" : "Login" }}
+              Switch to: Sign Up
             </button>
-
             <button
               mat-raised-button
               color="primary"
               type="submit"
-              [disabled]="form.invalid"
+              [disabled]="loginForm.invalid"
             >
-              {{ isLoginMode() ? "Login" : "Sign Up" }}
+              Login
             </button>
           </div>
         </form>
       </mat-card-content>
     </mat-card>
+    }@else {
+      <mat-card class="mat-elevation-z3">
+        <mat-card-content>
+<form [formGroup]="signupForm" (ngSubmit)="onSignUp()">
+      <mat-stepper
+        [orientation]="stepperOrientation()"
+        [linear]="true"
+        #stepper
+      >
+        <mat-step [stepControl]="formGroups[0]">
+          <div [formGroup]="formGroups[0]">
+            <ng-template matStepLabel>Email & Password</ng-template>
 
-    }
+            <mat-form-field appearance="outline" class="w-100 mb-3">
+              <mat-label>Email</mat-label>
+              <input matInput formControlName="email" type="email" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-100 mb-3">
+              <mat-label>Password</mat-label>
+              <input matInput formControlName="password" type="password" />
+            </mat-form-field>
+
+            <div class="d-flex justify-content-between">
+              <button
+                mat-stroked-button
+                color="accent"
+                type="button"
+                (click)="onSwitchmode()"
+              >
+                Switch to: Login
+              </button>
+              <button [disabled]="formGroups[0].invalid" mat-raised-button color="primary" type="button" matStepperNext>
+                Next
+              </button>
+            </div>
+          </div>
+        </mat-step>
+
+        <mat-step [stepControl]="formGroups[1]">
+          <div [formGroup]="formGroups[1]">
+            <ng-template matStepLabel>Personal Info</ng-template>
+
+            <mat-form-field appearance="outline" class="w-100 mb-3">
+              <mat-label>First Name</mat-label>
+              <input matInput formControlName="firstName" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-100 mb-3">
+              <mat-label>Last Name</mat-label>
+              <input matInput formControlName="lastName" />
+            </mat-form-field>
+
+            <div class="d-flex justify-content-between">
+              <button
+                mat-stroked-button
+                color="accent"
+                type="button"
+                (click)="onSwitchmode()"
+              >
+                Switch to: Login
+              </button>
+              <button mat-button matStepperPrevious>Back</button>
+              <button [disabled]="formGroups[1].invalid" mat-raised-button color="primary" type="button" matStepperNext>
+                Next
+              </button>
+            </div>
+          </div>
+        </mat-step>
+
+        <mat-step [stepControl]="formGroups[2]">
+          <div [formGroup]="formGroups[2]">
+            <ng-template matStepLabel>Contact Info</ng-template>
+
+            <mat-form-field appearance="outline" class="w-100 mb-3">
+              <mat-label>Phone</mat-label>
+              <input matInput formControlName="phone" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-100 mb-3">
+              <mat-label>Address</mat-label>
+              <input matInput formControlName="address" />
+            </mat-form-field>
+
+            <div class="d-flex justify-content-between">
+              <button
+                mat-stroked-button
+                color="accent"
+                type="button"
+                (click)="onSwitchmode()"
+              >
+                Switch to: Login
+              </button>
+              <button mat-button matStepperPrevious>Back</button>
+              <button [disabled]="signupForm.invalid" mat-raised-button color="primary" type="submit">
+                Sign Up
+              </button>
+            </div>
+          </div>
+        </mat-step>
+      </mat-stepper>
+    </form>
+        </mat-card-content>
+      </mat-card>
+    
+
+    } }
   </div>
 </div>

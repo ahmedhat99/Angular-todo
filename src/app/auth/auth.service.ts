@@ -9,7 +9,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { catchError, tap, throwError } from 'rxjs';
 import { User } from './user.model';
 import { Router, UrlTree } from '@angular/router';
- 
+
 export interface AuthResponseData {
   kind: string;
   idToken: string;
@@ -37,13 +37,13 @@ export function tokenHeaderInterceptor(
 export function authGuard(): boolean | UrlTree {
   const authService = inject(AuthService);
   const router = inject(Router);
- 
+
   const isLoggedIn = authService.getUser() !== null;
- 
+
   return isLoggedIn ? true : router.createUrlTree(['/auth']);
 }
- 
- 
+
+
 @Injectable({
   providedIn: 'root',
 })
@@ -58,14 +58,14 @@ export class AuthService {
   setUser(user: User | null) {
     this._user.set(user);
   }
- 
+
   clearUser() {
     this._user.set(null);
   }
- 
+
   httpClient = inject(HttpClient);
   router = inject(Router);
- 
+
   signup(
     email: string | null | undefined,
     password: string | null | undefined
@@ -91,7 +91,7 @@ export class AuthService {
         })
       );
   }
- 
+
   login(email: string | null | undefined, password: string | null | undefined) {
     return this.httpClient
       .post<AuthResponseData>(
@@ -114,7 +114,7 @@ export class AuthService {
         })
       );
   }
- 
+
   logout() {
     this._user.set(null);
     this.router.navigate(['/auth']);
@@ -149,13 +149,13 @@ export class AuthService {
       this.autoLogout(expirationDuration);
     }
   }
- 
+
   autoLogout(expirationDuration: number) {
     this.tokenExpirationTimer = setTimeout(() => {
       this.logout();
     }, expirationDuration);
   }
- 
+
   private handleAuthentication(
     email: string,
     localId: string,
